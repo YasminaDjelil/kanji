@@ -38,7 +38,7 @@ The site is generated. Don't edit `index.html` or `data.json` by hand; edit the 
 
 That rewrites `index.html` and `data.json`, copies the service worker, manifest and icons into place, and also makes `kanji.html`, the whole app as one file (not committed). The build stops with a message if a text or sentence breaks one of the rules above.
 
-After changing anything, also bump the version in `src/static/sw.js` (`kanji-v1` → `kanji-v2`) so phones pick up the update.
+After changing anything, also bump the version in `src/static/sw.js` (`kanji-v2` → `kanji-v3`) so phones pick up the update.
 
 | What you want to change | File |
 |---|---|
