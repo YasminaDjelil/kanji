@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kanji</title>
+<meta name="description" content="The 1,026 kanji of Japanese primary school, grade by grade: a checklist, words, texts to copy out, quizzes and printable practice sheets.">
+<!--HEAD-->
+<meta name="theme-color" content="#fbf8f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#16181c" media="(prefers-color-scheme: dark)">
+<style>
+:root{
+  --paper:#fbf8f2; --card:#ffffff; --ink:#1f2328; --muted:#5d6470; --line:#e6e0d4;
+  --soft:#f1ebdf; --soft2:#e3dccd; --acc:#c4432f; --acc2:#2e4a7a; --accbg:#fbe9e5; --acc2bg:#e7edf7;
+  --ok:#2f7a4f; --okbg:#e5f3ea;
+  --jps:"Hiragino Sans","Yu Gothic","Noto Sans JP","Noto Sans CJK JP","Meiryo",sans-serif;
+  --ui:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,var(--jps);
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#16181c; --card:#1e2127; --ink:#e9e6df; --muted:#a3a9b3; --line:#30343c;
+    --soft:#262a31; --soft2:#343943; --acc:#ef6a54; --acc2:#7fa2e0; --accbg:#3a2420; --acc2bg:#1f2a3d;
+    --ok:#6fcf97; --okbg:#1d3127; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#16181c; --card:#1e2127; --ink:#e9e6df; --muted:#a3a9b3; --line:#30343c;
+  --soft:#262a31; --soft2:#343943; --acc:#ef6a54; --acc2:#7fa2e0; --accbg:#3a2420; --acc2bg:#1f2a3d;
+  --ok:#6fcf97; --okbg:#1d3127; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.6 var(--ui);-webkit-text-size-adjust:100%}
+[lang="ja"]{font-family:var(--jps)}
+a{color:var(--acc2)}
+h1,h2,h3,p{margin:0}
+button{font:inherit;color:inherit}
+.bar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:860px;margin:0 auto;padding:8px 16px;display:flex;gap:10px;align-items:center}
+.brand{font-weight:700;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--ink)}
+.brand b{display:grid;place-items:center;width:30px;height:30px;border-radius:9px;background:var(--acc);color:#fff;font:700 18px/1 var(--jps)}
+.grow{flex:1}
+.nav{display:flex;gap:4px;background:var(--soft);border-radius:999px;padding:3px}
+.nav a{padding:5px 14px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:14.5px;white-space:nowrap}
+.nav a[aria-current]{background:var(--card);box-shadow:0 1px 2px rgba(0,0,0,.12);font-weight:600}
+.nav a span{display:none}
+main{max-width:860px;margin:0 auto;padding:18px 16px 90px;display:flex;flex-direction:column;gap:16px}
+@media (max-width:640px){
+  .nav{position:fixed;left:0;right:0;bottom:0;z-index:25;border-radius:0;background:var(--card);border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));justify-content:space-around}
+  .nav a{display:flex;flex-direction:column;align-items:center;gap:1px;font-size:11.5px;padding:4px 10px;color:var(--muted);flex:1}
+  .nav a span{display:block;font:500 19px/1.1 var(--jps)}
+  .nav a[aria-current]{background:none;box-shadow:none;color:var(--acc)}
+  main{padding-bottom:110px}
+}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.muted{color:var(--muted)} .small{font-size:13.5px}
+h1{font-size:22px} h2{font-size:18px} h3{font-size:15px}
+.tg{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px;cursor:pointer;font-size:14.5px;text-decoration:none;color:var(--ink);display:inline-block}
+.tg:hover{background:var(--soft)} .tg[aria-pressed="true"],.tg.on{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.tg.pri{background:var(--acc2);border-color:var(--acc2);color:#fff} .tg:disabled{opacity:.45;cursor:default}
+.mini{font-size:12.5px;padding:3px 10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.seg button{border:0;background:var(--card);padding:8px 12px;font-size:14px;cursor:pointer;border-inline-start:1px solid var(--line)}
+.seg button:first-child{border-inline-start:0} .seg button.on{background:var(--acc2);color:#fff;font-weight:600}
+.seg.st button.on[data-v="1"]{background:var(--acc2)} .seg.st button.on[data-v="2"]{background:var(--ok);color:#fff} .seg.st button.on[data-v="0"]{background:var(--soft2);color:var(--ink)}
+/* overview */
+.ov{display:flex;flex-direction:column;gap:2px;padding:8px}
+.ovr{display:grid;grid-template-columns:74px 1fr auto;gap:10px;align-items:center;border:0;background:none;padding:7px 8px;border-radius:10px;cursor:pointer;text-align:start;font-size:14px;width:100%}
+.ovr:hover{background:var(--soft)} .ovr.on{background:var(--acc2bg);font-weight:600}
+.ovr small{color:var(--muted);font-variant-numeric:tabular-nums;font-weight:400}
+.pbar{height:8px;border-radius:99px;background:var(--soft2);overflow:hidden;display:flex}
+.pbar i{display:block;height:100%} .pbar .k{background:var(--ok)} .pbar .l{background:var(--acc2)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);padding:4px 8px 2px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px}
+/* grid */
+.gh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;color:var(--muted);font-size:13.5px;margin:4px 0 -8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(48px,1fr));gap:6px}
+.kt{aspect-ratio:1;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font:500 26px/1 var(--jps);cursor:pointer;padding:0;text-decoration:none;display:grid;place-items:center}
+.kt.st1{box-shadow:inset 0 -4px 0 var(--acc2);background:var(--acc2bg)} .kt.st2{box-shadow:inset 0 -4px 0 var(--ok);background:var(--okbg)}
+.kt.sel{background:var(--acc2);border-color:var(--acc2);color:#fff;box-shadow:none}
+.kt.sm{width:40px;font-size:21px;display:inline-grid}
+.selbar{position:sticky;bottom:76px;display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 12px 8px 18px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.selbar span{flex:1;color:var(--muted);font-size:13.5px}
+@media (min-width:641px){.selbar{bottom:14px}}
+/* detail */
+.kd{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:18px}
+.kplay{border:0;background:none;padding:0;cursor:pointer;width:min(220px,64%)}
+.kplay svg{width:100%;display:block}
+.kx{fill:none;stroke:var(--line);stroke-width:.6;stroke-dasharray:2 2}
+.ks{fill:none;stroke:var(--ink);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round} .ks.cur{stroke:var(--acc)}
+.kmean{font-size:21px;font-weight:700}
+.krd{display:flex;gap:6px 16px;flex-wrap:wrap;justify-content:center;font-size:16px}
+.krd i{font-style:normal;font-size:11px;border:1px solid var(--line);border-radius:5px;padding:1px 5px;margin-inline-end:6px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:6px}
+.steps svg{border:1px solid var(--line);border-radius:8px;background:var(--card);display:block;width:100%}
+.wl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.wl li{display:grid;grid-template-columns:minmax(96px,auto) 1fr;gap:4px 14px;padding:8px 0;border-top:1px solid var(--line);align-items:baseline}
+.wl li:first-child{border-top:0}
+.wl b{font:500 20px/1.9 var(--jps)} .wl small{color:var(--muted)}
+.wl .lt{grid-column:1/-1;font-size:12.5px;color:var(--muted);margin-top:-6px}
+rt{font-size:.5em;color:var(--muted);font-weight:400}
+.sent{padding:10px 0;border-top:1px solid var(--line)} .sent:first-child{border-top:0}
+.sent .j{font:400 20px/2.3 var(--jps)} .sent .e{color:var(--muted);font-size:14.5px}
+.sent .c{font-size:11.5px;color:var(--muted);opacity:.8}
+.rev{border:0;background:none;color:var(--acc2);padding:0;cursor:pointer;font-size:14px;text-decoration:underline}
+.nav2{display:flex;justify-content:space-between;gap:8px;align-items:center}
+/* text */
+.txt{font:400 23px/2.5 var(--jps);letter-spacing:.02em}
+.tcard{display:flex;justify-content:space-between;gap:12px;align-items:center;text-decoration:none;color:var(--ink)}
+.tcard:hover{background:var(--soft)} .tcard .j{font:400 17px/1.5 var(--jps);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.tcard div{min-width:0}
+.need{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+/* quiz */
+.qtypes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px}
+.qtype{border:1px solid var(--line);background:var(--card);border-radius:var(--r);padding:12px 14px;text-align:start;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.qtype.on{border-color:var(--acc2);box-shadow:inset 0 0 0 1px var(--acc2);background:var(--acc2bg)}
+.qtype b{font-size:15.5px} .qtype span{font-size:13px;color:var(--muted)}
+.qq{text-align:center;display:flex;flex-direction:column;gap:14px;align-items:center;padding:22px 16px}
+.qbig{font:500 76px/1.1 var(--jps)} .qword{font:500 44px/1.3 var(--jps)} .qsent{font:400 23px/2.3 var(--jps)}
+.qsent mark{background:var(--accbg);color:var(--ink);border-bottom:3px solid var(--acc);padding:2px 3px;border-radius:4px}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:520px}
+.qo{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 10px;cursor:pointer;font-size:16px;min-height:52px}
+.qo[lang="ja"]{font-size:19px} .qo:disabled{cursor:default;opacity:.75}
+.qo.right{background:var(--okbg);border-color:var(--ok);opacity:1;font-weight:600} .qo.wrong{background:var(--accbg);border-color:var(--acc);opacity:1}
+.note{background:var(--acc2bg);border-radius:12px;padding:10px 14px;font-size:14.5px}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:999px;font-size:14px;z-index:40;box-shadow:0 6px 20px rgba(0,0,0,.3)}
+dl.about{margin:0;display:grid;gap:10px;font-size:14.5px} dl.about dt{font-weight:600} dl.about dd{margin:0;color:var(--muted)}
+/* print sheet */
+#printsheet{display:none}
+@media print{
+  body.psheet>*:not(#printsheet){display:none!important}
+  body.psheet{background:#fff!important;color:#000}
+  body.psheet #printsheet{display:block;font:11pt/1.35 var(--ui);color:#000}
+  @page{margin:12mm}
+}
+#printsheet header{font-size:13pt;margin:0 0 5mm;padding-bottom:2mm;border-bottom:1pt solid #000}
+.pk{break-inside:avoid;page-break-inside:avoid;margin:0 0 6mm}
+.pk-h{display:flex;gap:5mm;align-items:flex-start;margin-bottom:2mm}.pk-i{display:flex;flex-direction:column;gap:.6mm;min-width:0}.pk-i b{font-size:12pt}.pk-i i{font-style:normal;color:#444}
+.pbig{width:26mm;height:26mm;border:.6pt solid #000;flex:none}.psteps{display:flex;flex-wrap:wrap;gap:1mm;margin-top:1mm}.pstep{width:8.5mm;height:8.5mm;border:.4pt solid #999}
+.pboxes{display:grid;grid-template-columns:repeat(10,1fr);gap:0}.pbox{width:100%;border:.6pt solid #000;margin-inline-start:-.6pt}
+.ps{fill:none;stroke:#000;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}.ps.cur{stroke:#c4432f}.faint .ps{stroke:#c9c9c9}.pg{fill:none;stroke:#bbb;stroke-width:.5;stroke-dasharray:3 3}
+.pstep .pg{display:none}
+</style>
+</head>
+<body>
+<div class="bar"><div class="bar-in">
+  <a class="brand" href="#kanji"><b lang="ja">漢</b>Kanji</a>
+  <span class="grow"></span>
+  <nav class="nav" id="nav" aria-label="Sections">
+    <a href="#kanji" data-t="kanji"><span lang="ja" aria-hidden="true">字</span>Kanji</a>
+    <a href="#read" data-t="read"><span lang="ja" aria-hidden="true">文</span>Texts</a>
+    <a href="#quiz" data-t="quiz"><span lang="ja" aria-hidden="true">問</span>Quiz</a>
+    <a href="#more" data-t="more"><span lang="ja" aria-hidden="true">他</span>More</a>
+  </nav>
+</div></div>
+<main id="main"><p class="muted">Loading the kanji…</p></main>
+<div id="printsheet"></div>
+<noscript><p style="padding:20px">This page needs JavaScript.</p></noscript>
+<!--DATA-->
+<script>
+(function(){
+'use strict';
+var HOSTED=/*HOSTED*/false, KEY='kanji-app-v1';
+var S={v:1,st:{},fu:'learn',theme:'',bk:0,g:1}, D, K, KI={}, GI={}, SN=[], TX=[];
+var main=document.getElementById('main'), root=document.documentElement, b=document.body;
+var tick=false, sel=null, lastK=null, Q=null, sq=[], sfocus='learn', NS='http://www.w3.org/2000/svg', timers=[];
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]});}
+function load(){ if(!HOSTED) return; try{var t=localStorage.getItem(KEY); if(t){var o=JSON.parse(t); if(o&&typeof o.st==='object') for(var k in o) S[k]=o[k];}}catch(e){} }
+function save(){ if(!HOSTED) return; try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){} }
+function st(c){return S.st[c]||0}
+function setSt(c,v){ if(v) S.st[c]=v; else delete S.st[c]; save(); }
+function toast(m){var t=document.createElement('div'); t.className='toast'; t.textContent=m; b.appendChild(t); setTimeout(function(){t.remove()},2600);}
+function shuffle(a){a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)), t=a[i]; a[i]=a[j]; a[j]=t;} return a;}
+function hira(t){return t.replace(/[ァ-ヶ]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-96)});}
+function kOf(s){var o=[], m, re=/\{([^|{}]+)\|/g; while((m=re.exec(s))) for(var i=0;i<m[1].length;i++){var c=m[1][i]; if(KI[c]!==undefined&&o.indexOf(c)<0) o.push(c);} return o;}
+function allTicked(ks){for(var i=0;i<ks.length;i++) if(!st(ks[i])) return false; return true;}
+function anyLearning(w){for(var i=0;i<w.length;i++) if(st(w[i])===1) return true; return false;}
+// Japanese with furigana: {word|reading}. Furigana follows the setting: only on kanji marked "learning", on everything, or nowhere.
+function jp(s,o){o=o||{}; var n=0; return esc(s).replace(/\{([^|{}]+)\|([^{}]+)\}/g,function(_,w,r){var i=n++;
+  if(o.hide===i) return '<mark>'+w+'</mark>';
+  var show=o.all||(S.fu==='all')||(S.fu==='learn'&&anyLearning(w));
+  return show?'<ruby>'+w+'<rt>'+r+'</rt></ruby>':w;});}
+function plain(s){return s.replace(/\{([^|{}]+)\|[^{}]+\}/g,'$1');}
+function tile(c,cls){return '<a class="kt st'+st(c)+(cls?' '+cls:'')+'" lang="ja" href="#k/'+encodeURIComponent(c)+'" data-k="'+c+'">'+c+'</a>';}
+function fuSeg(){return '<div class="seg" role="group" aria-label="Furigana">'+[['learn','On kanji I’m learning'],['all','On all kanji'],['none','None']].map(function(a){return '<button data-a="fu" data-v="'+a[0]+'"'+(S.fu===a[0]?' class="on"':'')+'>'+a[1]+'</button>'}).join('')+'</div>';}
+function counts(g){var k=0,l=0,n=0; K.forEach(function(a){if(g&&a[1]!==g) return; n++; var s=st(a[0]); if(s===2) k++; else if(s===1) l++;}); return {k:k,l:l,n:n};}
+
+// ---------- Kanji: the checklist ----------
+function vKanji(){
+  var g=S.g, h='<section class="card ov" aria-label="Progress by grade">';
+  for(var i=1;i<=6;i++){var c=counts(i); h+='<button class="ovr'+(i===g?' on':'')+'" data-a="grade" data-v="'+i+'"><span>Grade '+i+'</span><span class="pbar"><i class="k" style="width:'+(c.k/c.n*100)+'%"></i><i class="l" style="width:'+(c.l/c.n*100)+'%"></i></span><small>'+c.k+' known · '+c.l+' learning · '+c.n+'</small></button>';}
+  var t=counts(0);
+  h+='<div class="legend"><span><i style="background:var(--ok)"></i>Known '+t.k+'</span><span><i style="background:var(--acc2)"></i>Learning '+t.l+'</span><span><i style="background:var(--soft2)"></i>Not yet '+(t.n-t.k-t.l)+'</span></div></section>';
+  h+='<div class="row"><button class="tg" data-a="tick" aria-pressed="'+tick+'">Tick quickly</button><button class="tg" data-a="selmode" aria-pressed="'+!!sel+'">Choose kanji for a sheet</button>'+(t.l?'<button class="tg" data-a="sheetlearn">Sheet of what I’m learning</button>':'')+'</div>';
+  if(tick) h+='<p class="note">Tap a kanji to change it: learning → known → not yet. Turn this off to open a kanji’s page instead.</p>';
+  else if(sel) h+='<p class="note">Tap the kanji you want on the practice sheet.</p>';
+  else if(!t.k&&!t.l) h+='<p class="note">This is your checklist. Open a kanji to see it, then mark it as <b>learning</b> or <b>known</b>. The groups are only a suggested order; tick anything you like, in any order. Texts and quizzes use only what you have ticked.</p>';
+  var gn=0;
+  D.g.forEach(function(G,gi){ if(G[0]!==g) return; gn++;
+    var ks=G[1].split('');
+    h+='<div class="gh"><span>Group '+gn+'</span><span class="row">'+(sel?'<button class="tg mini" data-a="selgrp" data-v="'+gi+'">Select all</button>':tick?'<button class="tg mini" data-a="grpst" data-v="'+gi+'" data-s="1">All learning</button><button class="tg mini" data-a="grpst" data-v="'+gi+'" data-s="2">All known</button>':'<button class="tg mini" data-a="sheetgrp" data-v="'+gi+'">Practice sheet</button>')+'</span></div><div class="grid">'+ks.map(function(c){return tile(c,sel&&sel[c]?'sel':'')}).join('')+'</div>';});
+  if(sel){var n=Object.keys(sel).length; h+='<div class="selbar"><span>'+n+' chosen</span><button class="tg" data-a="selmode">Cancel</button><button class="tg pri" data-a="selprint"'+(n?'':' disabled')+'>Make the sheet</button></div>';}
+  main.innerHTML=h;
+  if(lastK&&K[KI[lastK]][1]===g){var el=main.querySelector('[data-k="'+lastK+'"]'); if(el) el.scrollIntoView({block:'center'});} else window.scrollTo(0,0);
+  lastK=null;
+}
+// ---------- one kanji ----------
+function strokesSvg(c,cls){var a=K[KI[c]], h='<svg viewBox="0 0 109 109" class="'+(cls||'')+'" aria-hidden="true"><path class="kx" d="M54.5 0V109M0 54.5H109"/>'; a[6].forEach(function(d){h+='<path class="ks" d="'+d+'"/>'}); return h+'</svg>';}
+function stop(){timers.forEach(clearTimeout); timers=[];}
+function anim(svg){stop(); if(!svg) return; var ps=svg.querySelectorAll('.ks'), t=250;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  [].forEach.call(ps,function(p){var L=p.getTotalLength(), dur=Math.max(260,L*9); p.style.transition='none'; p.style.strokeDasharray=L+' '+L; p.style.strokeDashoffset=L;
+    timers.push(setTimeout(function(){p.style.transition='stroke-dashoffset '+dur+'ms ease-out'; p.style.strokeDashoffset=0;},t)); t+=dur+160;});}
+function stSeg(c){return '<div class="seg st" role="group" aria-label="My status for this kanji">'+[[0,'Not yet'],[1,'Learning'],[2,'Known']].map(function(a){return '<button data-a="st" data-k="'+c+'" data-v="'+a[0]+'"'+(st(c)===a[0]?' class="on"':'')+'>'+a[1]+'</button>'}).join('')+'</div>';}
+function sentHtml(s,o){return '<div class="sent"><div class="j" lang="ja">'+jp(s[0],o)+'</div><div class="e"><button class="rev" data-a="rev">Show English</button><span hidden>'+esc(s[1])+'</span></div><div class="c">Tatoeba #'+parseInt(s[2],36)+(s[3]||s[4]?' · '+esc([s[3],s[4]].filter(Boolean).join(', ')):'')+'</div></div>';}
+function vDetail(c){
+  var i=KI[c]; if(i===undefined){location.hash='#kanji'; return;}
+  var a=K[i], gi=GI[c], G=D.g[gi], gn=0; for(var x=0;x<=gi;x++) if(D.g[x][0]===G[0]) gn++;
+  S.g=a[1]; lastK=c;
+  var h='<div class="nav2"><a class="tg" href="#kanji">← List</a><span class="row">'+(i>0?'<a class="tg" lang="ja" href="#k/'+encodeURIComponent(K[i-1][0])+'" aria-label="Previous kanji">← Previous · '+K[i-1][0]+'</a>':'')+(i<K.length-1?'<a class="tg" lang="ja" href="#k/'+encodeURIComponent(K[i+1][0])+'" aria-label="Next kanji">Next · '+K[i+1][0]+' →</a>':'')+'</span></div>';
+  h+='<section class="card kd"><button class="kplay" data-a="replay" aria-label="Kanji '+c+'. Play the stroke order again">'+strokesSvg(c)+'</button><p class="kmean">'+esc(a[4].join(', '))+'</p><p class="krd" lang="ja">'+(a[2].length?'<span><i>on</i>'+esc(a[2].join('、'))+'</span>':'')+(a[3].length?'<span><i>kun</i>'+esc(a[3].join('、').replace(/\./g,'·'))+'</span>':'')+'</p><p class="muted small">Grade '+a[1]+' · group '+gn+' · '+a[6].length+' strokes</p>'+stSeg(c)+'</section>';
+  h+='<section class="card"><h3>Stroke by stroke</h3><div class="steps" style="margin-top:10px" aria-hidden="true">';
+  a[6].forEach(function(_,n){h+='<svg viewBox="0 0 109 109">'; for(var j=0;j<=n;j++) h+='<path class="ks'+(j===n?' cur':'')+'" d="'+a[6][j]+'"/>'; h+='</svg>';});
+  h+='</div><p style="margin-top:12px"><button class="tg" data-a="sheetone" data-k="'+c+'">Print a practice sheet</button></p></section>';
+  if(a[5].length){h+='<section class="card"><h3>Words</h3><ul class="wl" style="margin-top:4px">'; a[5].forEach(function(w){h+='<li><b lang="ja"><ruby>'+esc(w[0])+'<rt>'+esc(w[1])+'</rt></ruby></b><span>'+esc(w[2])+'</span>'+(w[3]?'<span class="lt">uses a kanji that comes later in the order</span>':'')+'</li>';}); h+='</ul></section>';}
+  var ss=[]; for(var n=0;n<SN.length&&ss.length<3;n++){var s=SN[n]; if(s.k.indexOf(c)<0) continue; var okk=true; for(var j=0;j<s.k.length;j++) if(s.k[j]!==c&&!st(s.k[j])){okk=false;break;} if(okk) ss.push(D.s[n]);}
+  h+='<section class="card"><h3>In a sentence</h3>'+(ss.length?ss.map(function(s){return sentHtml(s,{all:!st(c)})}).join(''):'<p class="muted small" style="margin-top:6px">Sentences show up here once the other kanji they use are ticked.</p>')+'</section>';
+  h+='<p class="muted small" style="text-align:center">Readings, meanings and words: KANJIDIC2 and JMdict, © EDRDG. Strokes: KanjiVG. <a href="#more">Sources</a></p>';
+  main.innerHTML=h; window.scrollTo(0,0); anim(main.querySelector('.kplay svg'));
+}
+// ---------- texts and sentences ----------
+function readTabs(t){return '<div class="seg" style="align-self:flex-start"><button data-a="go" data-v="#read"'+(t==='t'?' class="on"':'')+'>Texts</button><button data-a="go" data-v="#read/s"'+(t==='s'?' class="on"':'')+'>Sentences</button></div>';}
+function missing(t){return t.k.filter(function(c){return !st(c)});}
+function vRead(){
+  var ready=[], near=[], far=0;
+  TX.forEach(function(t,i){var m=missing(t); if(!m.length) ready.push(i); else if(m.length<=4) near.push([i,m]); else far++;});
+  var h=readTabs('t')+'<p class="muted">Short texts to copy into your notebook. A text opens once you have ticked every kanji in it, so nothing unknown ever appears.</p>';
+  h+='<h2>Ready to read · '+ready.length+'</h2>';
+  if(!ready.length) h+='<p class="note">Nothing yet. Tick the kanji of the first group in Grade 1 and the first text opens.</p>';
+  ready.slice().reverse().forEach(function(i){var t=TX[i]; h+='<a class="card tcard" href="#text/'+(i+1)+'"><div><b>Text '+(i+1)+'</b> <span class="muted small">· Grade '+D.g[i][0]+'</span><div class="j" lang="ja">'+esc(plain(t.jp).slice(0,40))+'</div></div><span class="tg">Open</span></a>';});
+  if(near.length){h+='<h2>Nearly there</h2>'; near.slice(0,12).forEach(function(x){h+='<div class="card"><div class="row" style="justify-content:space-between"><span><b>Text '+(x[0]+1)+'</b> <span class="muted small">· Grade '+D.g[x[0]][0]+'</span></span><span class="need"><span class="muted small">still needs</span>'+x[1].map(function(c){return tile(c,'sm')}).join('')+'</span></div></div>';});}
+  if(far) h+='<p class="muted small">'+far+' more texts open up as you tick more kanji.</p>';
+  main.innerHTML=h; window.scrollTo(0,0);
+}
+function vText(n){
+  var t=TX[n-1]; if(!t||missing(t).length){location.hash='#read'; return;}
+  var ready=[]; TX.forEach(function(x,i){if(!missing(x).length) ready.push(i+1)}); var p=ready.indexOf(n);
+  var h='<div class="nav2"><a class="tg" href="#read">← Texts</a><span class="row">'+(p>0?'<a class="tg" href="#text/'+ready[p-1]+'">← Text '+ready[p-1]+'</a>':'')+(p<ready.length-1?'<a class="tg" href="#text/'+ready[p+1]+'">Text '+ready[p+1]+' →</a>':'')+'</span></div>';
+  h+='<h1>Text '+n+' <span class="muted small" style="font-weight:400">· Grade '+D.g[n-1][0]+'</span></h1>'+fuSeg();
+  h+='<section class="card"><p class="txt" lang="ja">'+jp(t.jp)+'</p></section>';
+  h+='<p class="muted small">Copy it out by hand, then read it aloud. Cover the furigana once the readings come easily.</p>';
+  h+='<section class="card"><button class="rev" data-a="rev">Show the English</button><span hidden>'+esc(t.en)+'</span></section>';
+  h+='<section class="card"><h3>Words in this text</h3><ul class="wl" style="margin-top:4px">'+t.w.map(function(w){return '<li><b lang="ja"><ruby>'+esc(w[0])+'<rt>'+esc(w[1])+'</rt></ruby></b><span>'+esc(w[2])+'</span></li>'}).join('')+'</ul></section>';
+  h+='<section class="card"><h3>Kanji in this text</h3><div class="need" style="margin-top:8px">'+t.k.map(function(c){return tile(c,'sm')}).join('')+'</div></section>';
+  main.innerHTML=h; window.scrollTo(0,0);
+}
+function sPool(){var o=[]; SN.forEach(function(s,i){ if(!allTicked(s.k)) return; if(sfocus==='learn'){var l=false; for(var j=0;j<s.k.length;j++) if(st(s.k[j])===1){l=true;break;} if(!l) return;} o.push(i);}); return o;}
+function vSent(fresh){
+  var pool=sPool(), has=false; for(var c in S.st){ if(S.st[c]===1){has=true;break;} }
+  if(sfocus==='learn'&&!has){sfocus='all'; pool=sPool();}
+  if(fresh||!sq.length||sq.some(function(i){return pool.indexOf(i)<0})) sq=shuffle(pool).slice(0,5);
+  var h=readTabs('s')+'<p class="muted">Real sentences, each made only of kanji you have ticked. Copy them out, then check the English.</p>';
+  h+='<div class="row"><div class="seg"><button data-a="sfocus" data-v="learn"'+(sfocus==='learn'?' class="on"':'')+(has?'':' disabled')+'>With kanji I’m learning</button><button data-a="sfocus" data-v="all"'+(sfocus==='all'?' class="on"':'')+'>With anything ticked</button></div></div>'+fuSeg();
+  if(!sq.length) h+='<p class="note">No sentence fits yet. They appear as soon as you have ticked all the kanji one of them uses.</p>';
+  else h+='<section class="card">'+sq.map(function(i){return sentHtml(D.s[i])}).join('')+'</section><div class="row"><button class="tg pri" data-a="smore">Five more</button><span class="muted small">'+pool.length+' sentences fit your kanji right now</span></div>';
+  main.innerHTML=h; if(fresh) window.scrollTo(0,0);
+}
+// ---------- quizzes: nothing here changes your ticks ----------
+var QT={m:['Kanji → meaning','See a kanji, choose what it means.'],r:['Word → reading','See a word, choose how it is read.'],s:['Reading in a sentence','Read the marked word inside a real sentence.']};
+var qtype='m', qpool='l';
+function qKanji(p){return K.map(function(a){return a[0]}).filter(function(c){var s=st(c); return p==='b'?s>0:p==='l'?s===1:s===2;});}
+function readings(c){var a=K[KI[c]], o=[]; a[2].forEach(function(r){o.push(hira(r))}); a[3].forEach(function(r){o.push(r.split('.')[0])}); return o;}
+function pick4(ans,cands){var o=[ans]; shuffle(cands).forEach(function(x){ if(o.length<4&&o.indexOf(x)<0) o.push(x);}); return o.length<4?null:shuffle(o);}
+// wrong answers for a reading: the kanji's other readings first, then look-alikes (same length, same first or last kana), then anything close in length
+function pickR(ans,own,all){var o=[ans], L=ans.length, f=ans[0], e=ans[L-1];
+  var tiers=[own, all.filter(function(r){return r.length===L&&(r[0]===f||r[L-1]===e)}), all.filter(function(r){return Math.abs(r.length-L)<=1&&(r[0]===f||r[r.length-1]===e)}), all.filter(function(r){return r.length===L}), all.filter(function(r){return Math.abs(r.length-L)<=1}), all];
+  tiers.forEach(function(t){shuffle(t).forEach(function(x){ if(o.length<4&&o.indexOf(x)<0) o.push(x);});});
+  return o.length<4?null:shuffle(o);}
+function qBuild(type,pool){
+  var P=shuffle(qKanji(pool)), items=[], allR=[];
+  if(type==='m') P.forEach(function(c){ if(items.length>=10) return; var a=K[KI[c]], ans=a[4].slice(0,2).join(', ');
+    var cand=K.filter(function(x){return x[1]===a[1]&&x[0]!==c}).map(function(x){return x[4].slice(0,2).join(', ')});
+    var o=pick4(ans,cand); if(o) items.push({k:c,show:'<div class="qbig" lang="ja">'+c+'</div>',opts:o,ans:ans,ja:false,after:esc(a[4].join(', '))});});
+  if(type==='r'){
+    K.forEach(function(a){ if(st(a[0])) a[5].forEach(function(w){allR.push(w[1])});});
+    P.forEach(function(c){ if(items.length>=10) return; var ws=K[KI[c]][5].filter(function(w){for(var i=0;i<w[0].length;i++){var ch=w[0][i]; if(KI[ch]!==undefined&&!st(ch)) return false;} return true;});
+      if(!ws.length) return; var w=ws[Math.floor(Math.random()*ws.length)], cand=[];
+      if(w[0].length===1) cand=readings(c); 
+      var o=pickR(w[1],cand,allR);
+      if(!o){var extra=[]; K.forEach(function(a){ if(a[1]===K[KI[c]][1]) a[5].forEach(function(x){extra.push(x[1])});}); o=pickR(w[1],cand,extra);}
+      if(o) items.push({k:c,show:'<div class="qword" lang="ja">'+esc(w[0])+'</div>',opts:o,ans:w[1],ja:true,after:'<span lang="ja">'+esc(w[0])+'（'+esc(w[1])+'）</span> — '+esc(w[2])});});
+  }
+  if(type==='s'){
+    var inP={}; P.forEach(function(c){inP[c]=1}); var used={}, chunks=[];
+    var ok=[]; SN.forEach(function(s,i){ if(allTicked(s.k)){ ok.push(i); var m, re=/\{([^|{}]+)\|([^{}]+)\}/g; while((m=re.exec(D.s[i][0]))) chunks.push(m[2]); }});
+    shuffle(ok).forEach(function(i){ if(items.length>=10) return; var s=D.s[i][0], m, re=/\{([^|{}]+)\|([^{}]+)\}/g, n=0, tg=[];
+      while((m=re.exec(s))){ for(var j=0;j<m[1].length;j++) if(inP[m[1][j]]&&!used[m[1]]){tg.push([n,m[1],m[2]]); break;} n++; }
+      if(!tg.length) return; var t=tg[Math.floor(Math.random()*tg.length)], cand=[];
+      if(t[1].length===1) cand=readings(t[1]);
+      var o=pickR(t[2],cand,chunks);
+      if(!o) return; used[t[1]]=1;
+      var kk=''; for(var j=0;j<t[1].length;j++) if(inP[t[1][j]]){kk=t[1][j];break;}
+      items.push({k:kk,show:'<div class="qsent" lang="ja">'+jp(s,{hide:t[0]})+'</div>',opts:o,ans:t[2],ja:true,after:'<span lang="ja">'+esc(t[1])+'（'+esc(t[2])+'）</span> — '+esc(D.s[i][1])});});
+  }
+  return items;
+}
+function vQuiz(){
+  if(Q&&Q.items){ return qShow(); }
+  var nl=qKanji('l').length, nk=qKanji('k').length;
+  if(qpool==='l'&&!nl) qpool=nk?'k':'b';
+  var h='<h1>Quiz</h1><p class="muted">A way to check yourself. Nothing is scored or saved, and a quiz never changes your ticks: you decide when a kanji is known.</p>';
+  if(!nl&&!nk){main.innerHTML=h+'<p class="note">Tick a few kanji as learning or known first. Quizzes only ask about those.</p>'; return;}
+  h+='<div class="qtypes">'+['m','r','s'].map(function(t){return '<button class="qtype'+(qtype===t?' on':'')+'" data-a="qtype" data-v="'+t+'"><b>'+QT[t][0]+'</b><span>'+QT[t][1]+'</span></button>'}).join('')+'</div>';
+  h+='<div class="row"><span class="muted small">Ask about</span><div class="seg"><button data-a="qpool" data-v="l"'+(qpool==='l'?' class="on"':'')+(nl?'':' disabled')+'>Learning · '+nl+'</button><button data-a="qpool" data-v="k"'+(qpool==='k'?' class="on"':'')+(nk?'':' disabled')+'>Known · '+nk+'</button><button data-a="qpool" data-v="b"'+(qpool==='b'?' class="on"':'')+'>Both · '+(nl+nk)+'</button></div></div>';
+  h+='<div class="row"><button class="tg pri" data-a="qstart">Start</button><span class="muted small">Up to 10 questions</span></div>';
+  main.innerHTML=h; window.scrollTo(0,0);
+}
+function qShow(){
+  var h, it;
+  if(Q.i>=Q.items.length){
+    h='<h1>Done</h1><section class="card"><p>You got <b>'+Q.right+'</b> of <b>'+Q.items.length+'</b>.</p><p class="muted small" style="margin-top:6px">This is not saved anywhere and your ticks are unchanged.</p></section>';
+    if(Q.missed.length) h+='<section class="card"><h3>Worth another look</h3><div class="need" style="margin-top:8px">'+Q.missed.map(function(c){return tile(c,'sm')}).join('')+'</div></section>';
+    h+='<div class="row"><button class="tg pri" data-a="qstart">Again</button><button class="tg" data-a="qquit">Choose another quiz</button></div>';
+    main.innerHTML=h; return;
+  }
+  it=Q.items[Q.i];
+  h='<div class="nav2"><button class="tg" data-a="qquit">← Stop</button><span class="muted small">'+QT[Q.type][0]+' · '+(Q.i+1)+' / '+Q.items.length+'</span></div>';
+  h+='<section class="card qq">'+it.show+'<div class="qopts">'+it.opts.map(function(o,n){var c=''; if(Q.done){ if(o===it.ans) c=' right'; else if(n===Q.pick) c=' wrong'; } return '<button class="qo'+c+'" data-a="qans" data-v="'+n+'"'+(it.ja?' lang="ja"':'')+(Q.done?' disabled':'')+'>'+esc(o)+'</button>'}).join('')+'</div>';
+  if(Q.done) h+='<p>'+it.after+'</p><button class="tg pri" data-a="qnext" id="qnext">'+(Q.i===Q.items.length-1?'Finish':'Next')+'</button>';
+  h+='</section>';
+  main.innerHTML=h; if(Q.done){var nb=document.getElementById('qnext'); if(nb) nb.focus({preventScroll:true});}
+}
+// ---------- printable practice sheets ----------
+function pSvg(c,upto,cls){var s=K[KI[c]][6], h='<svg viewBox="0 0 109 109" class="'+cls+'"><path class="pg" d="M54.5 0V109M0 54.5H109"/>'; for(var i=0;i<s.length&&(upto<0||i<=upto);i++) h+='<path class="ps'+(upto>=0&&i===upto?' cur':'')+'" d="'+s[i]+'"/>'; return h+'</svg>';}
+function printSheet(ks,title){ if(!ks.length) return;
+  var el=document.getElementById('printsheet'), h='<header><b lang="ja">漢字</b> practice sheet'+(title?' — '+esc(title):'')+'</header>';
+  ks.forEach(function(c){var a=K[KI[c]], w=a[5][0], steps='', boxes='';
+    for(var i=0;i<a[6].length&&i<18;i++) steps+=pSvg(c,i,'pstep');
+    for(var j=0;j<10;j++) boxes+=j<3?pSvg(c,-1,'pbox faint'):'<svg viewBox="0 0 109 109" class="pbox"><path class="pg" d="M54.5 0V109M0 54.5H109"/></svg>';
+    h+='<section class="pk"><div class="pk-h">'+pSvg(c,-1,'pbig')+'<div class="pk-i"><b>'+esc(a[4].join(', '))+'</b><span lang="ja">'+esc([a[2].join('、'),a[3].join('、')].filter(Boolean).join(' · '))+'</span>'+(w?'<span lang="ja">'+esc(w[0])+(w[1]!==w[0]?' ('+esc(w[1])+')':'')+' <i>'+esc(w[2])+'</i></span>':'')+'<div class="psteps">'+steps+'</div></div></div><div class="pboxes">'+boxes+'</div></section>';});
+  el.innerHTML=h; b.classList.add('psheet');
+  var done=function(){b.classList.remove('psheet'); window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(function(){try{window.print()}catch(e){done()}},60);
+}
+// ---------- more: settings, backup, about ----------
+function backupNow(){
+  S.bk=Date.now(); save();
+  var txt=JSON.stringify({app:'kanji',v:1,at:S.bk,st:S.st,fu:S.fu,theme:S.theme,g:S.g},null,1), d=new Date(), name='kanji-progress-'+d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)+'.json';
+  try{var f=new File([txt],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|iPod|Android/.test(navigator.userAgent)){navigator.share({files:[f]}).then(function(){toast('Backup saved'); vMore();},function(){}); return;}
+  }catch(e){}
+  var blob=new Blob([txt],{type:'application/json'}), u=URL.createObjectURL(blob), l=document.createElement('a'); l.href=u; l.download=name; b.appendChild(l); l.click(); l.remove(); setTimeout(function(){URL.revokeObjectURL(u)},3e4); toast('Backup saved'); vMore();
+}
+function restoreFrom(file){var fr=new FileReader();
+  fr.onload=function(){ try{var d=JSON.parse(fr.result); if(!d||d.app!=='kanji'||typeof d.st!=='object') throw 0;
+      var n={}, c=0; for(var k in d.st) if(KI[k]!==undefined&&(d.st[k]===1||d.st[k]===2)){n[k]=d.st[k]; c++;}
+      if(!confirm('Replace your current ticks with the '+c+' kanji in this backup?')) return;
+      S.st=n; if(d.fu) S.fu=d.fu; if(d.theme!==undefined){S.theme=d.theme; applyTheme();} if(d.g>=1&&d.g<=6) S.g=d.g; save(); toast('Restored '+c+' kanji'); vMore();
+    }catch(e){alert('That file is not a Kanji backup.');} };
+  fr.readAsText(file);
+}
+function applyTheme(){ if(S.theme) root.setAttribute('data-theme',S.theme); else root.removeAttribute('data-theme'); }
+function vMore(){
+  var t=counts(0), h='<h1>More</h1>';
+  h+='<section class="card" style="display:flex;flex-direction:column;gap:12px"><h3>Furigana in texts and sentences</h3>'+fuSeg()+'<h3>Appearance</h3><div class="seg" style="align-self:flex-start">'+[['','Automatic'],['light','Light'],['dark','Dark']].map(function(a){return '<button data-a="theme" data-v="'+a[0]+'"'+(S.theme===a[0]?' class="on"':'')+'>'+a[1]+'</button>'}).join('')+'</div></section>';
+  h+='<section class="card" style="display:flex;flex-direction:column;gap:10px"><h3>Backup</h3><p class="muted small">'+(HOSTED?'Your ticks are kept in this browser on this device only.':'This is the single-file version: your ticks last only until you close the page, so save a backup before you leave.')+' A backup is one small file you can restore here or on another device.'+(S.bk?' Last backup: '+new Date(S.bk).toLocaleDateString()+'.':'')+'</p><div class="row"><button class="tg pri" data-a="backup">Save a backup</button><label class="tg">Restore from a file<input type="file" id="rfile" accept=".json,application/json" hidden></label></div><p class="muted small">'+t.k+' known · '+t.l+' learning</p><div><button class="rev" data-a="reset">Clear all my ticks</button></div></section>';
+  h+='<section class="card"><h3>About</h3><dl class="about" style="margin-top:8px"><div><dt>What this is</dt><dd>The 1,026 kanji taught in Japanese primary school, in the grades they are taught in. A checklist you tick yourself, with words, texts to copy out, quizzes and practice sheets. No points, no streaks, nothing locked.</dd></div><div><dt>Kanji, readings, meanings and words</dt><dd>From KANJIDIC2 and JMdict, the property of the Electronic Dictionary Research and Development Group, used under the <a href="https://www.edrdg.org/edrdg/licence.html" rel="noopener">Group\'s licence</a> (CC BY-SA 4.0).</dd></div><div><dt>Stroke order</dt><dd>From <a href="https://kanjivg.tagaini.net/" rel="noopener">KanjiVG</a>, © Ulrich Apel, CC BY-SA 3.0.</dd></div><div><dt>Sentences</dt><dd>From the <a href="https://tatoeba.org/" rel="noopener">Tatoeba</a> project, CC BY 2.0 FR. Each one shows its number and contributors.</dd></div><div><dt>Texts and the app</dt><dd>The 128 short texts, the order of the kanji within each grade and the app itself were made with an AI assistant. No teacher has checked the texts, so treat them as practice material and expect the odd stiff sentence.</dd></div></dl></section>';
+  main.innerHTML=h; window.scrollTo(0,0);
+  var rf=document.getElementById('rfile'); rf.addEventListener('change',function(){ if(rf.files[0]) restoreFrom(rf.files[0]); });
+}
+// ---------- routing and events ----------
+function route(){
+  stop(); var p=decodeURIComponent(location.hash.slice(1)).split('/'), tab='kanji';
+  if(p[0]!=='quiz') Q=null;
+  if(p[0]==='k'){vDetail(p[1]);}
+  else if(p[0]==='read'){tab='read'; if(p[1]==='s') vSent(true); else vRead();}
+  else if(p[0]==='text'){tab='read'; vText(parseInt(p[1],10));}
+  else if(p[0]==='quiz'){tab='quiz'; vQuiz();}
+  else if(p[0]==='more'){tab='more'; vMore();}
+  else vKanji();
+  [].forEach.call(document.querySelectorAll('#nav a'),function(a){ if(a.getAttribute('data-t')===tab) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+}
+document.getElementById('nav').addEventListener('click',function(e){var l=e.target.closest('a'); if(l&&l.getAttribute('href')===location.hash){e.preventDefault(); Q=null; tick=false; sel=null; route(); window.scrollTo(0,0);}});
+function rerender(){var y=window.scrollY; route(); window.scrollTo(0,y);}
+main.addEventListener('click',function(e){
+  var t=e.target.closest('[data-a],[data-k]'); if(!t) return;
+  var a=t.getAttribute('data-a'), v=t.getAttribute('data-v'), k=t.getAttribute('data-k');
+  if(!a&&k&&(tick||sel)&&t.classList.contains('kt')&&!t.classList.contains('sm')){ e.preventDefault();
+    if(sel){ if(sel[k]) delete sel[k]; else sel[k]=1; } else setSt(k,(st(k)+1)%3);
+    var y=window.scrollY; vKanji(); window.scrollTo(0,y); return; }
+  if(!a) return;
+  var y0=window.scrollY, keep=function(f){f(); window.scrollTo(0,y0);};
+  if(a==='grade'){S.g=+v; save(); keep(vKanji);}
+  else if(a==='tick'){tick=!tick; sel=null; keep(vKanji);}
+  else if(a==='selmode'){sel=sel?null:{}; tick=false; keep(vKanji);}
+  else if(a==='selgrp'){D.g[+v][1].split('').forEach(function(c){sel[c]=1}); keep(vKanji);}
+  else if(a==='grpst'){var s=+t.getAttribute('data-s'); D.g[+v][1].split('').forEach(function(c){S.st[c]=s}); save(); keep(vKanji);}
+  else if(a==='selprint'){printSheet(K.map(function(x){return x[0]}).filter(function(c){return sel[c]}),'');}
+  else if(a==='sheetgrp'){var G=D.g[+v], n=0; for(var i=0;i<=+v;i++) if(D.g[i][0]===G[0]) n++; printSheet(G[1].split(''),'Grade '+G[0]+', group '+n);}
+  else if(a==='sheetlearn'){printSheet(K.map(function(x){return x[0]}).filter(function(c){return st(c)===1}),'kanji I’m learning');}
+  else if(a==='sheetone'){printSheet([k],'');}
+  else if(a==='st'){setSt(k,+v); [].forEach.call(t.parentNode.children,function(x){x.classList.toggle('on',x===t)});}
+  else if(a==='replay'){anim(t.querySelector('svg'));}
+  else if(a==='rev'){var sp=t.nextElementSibling; sp.hidden=false; t.remove();}
+  else if(a==='fu'){S.fu=v; save(); rerender();}
+  else if(a==='go'){location.hash=v;}
+  else if(a==='sfocus'){sfocus=v; vSent(true);}
+  else if(a==='smore'){vSent(true);}
+  else if(a==='qtype'){qtype=v; keep(vQuiz);}
+  else if(a==='qpool'){qpool=v; keep(vQuiz);}
+  else if(a==='qstart'){var ty=Q?Q.type:qtype, po=Q?Q.pool:qpool, items=qBuild(ty,po); Q=null;
+    if(!items.length){vQuiz(); toast(ty==='m'?'Not enough kanji for this quiz yet':'No words or sentences fit these kanji yet'); return;}
+    Q={type:ty,pool:po,items:items,i:0,right:0,missed:[],done:false,pick:-1}; qShow(); window.scrollTo(0,0);}
+  else if(a==='qans'){ if(Q.done) return; var it=Q.items[Q.i]; Q.pick=+v; Q.done=true; if(it.opts[Q.pick]===it.ans) Q.right++; else if(it.k&&Q.missed.indexOf(it.k)<0) Q.missed.push(it.k); qShow();}
+  else if(a==='qnext'){Q.i++; Q.done=false; Q.pick=-1; qShow(); window.scrollTo(0,0);}
+  else if(a==='qquit'){Q=null; vQuiz();}
+  else if(a==='theme'){S.theme=v; save(); applyTheme(); keep(vMore);}
+  else if(a==='backup'){backupNow();}
+  else if(a==='reset'){ if(confirm('Clear every tick? Save a backup first if you might want them back.')){S.st={}; save(); vMore(); toast('All ticks cleared');} }
+});
+function start(d){
+  D=d; K=D.k; K.forEach(function(a,i){KI[a[0]]=i}); D.g.forEach(function(G,i){G[1].split('').forEach(function(c){GI[c]=i})});
+  SN=D.s.map(function(s){return {k:kOf(s[0])}}); TX=D.t.map(function(t){return {jp:t[0],en:t[1],w:t[2],k:kOf(t[0])}});
+  load(); applyTheme(); route(); window.addEventListener('hashchange',route);
+}
+var emb=document.getElementById('data');
+if(emb) start(JSON.parse(emb.textContent));
+else fetch('data.json').then(function(r){return r.json()}).then(start).catch(function(){main.innerHTML='<p class="note">The kanji data could not be loaded. Check your connection and reload.</p>';});
+if(HOSTED&&'serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')) window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+})();
+</script>
+</body>
+</html>
