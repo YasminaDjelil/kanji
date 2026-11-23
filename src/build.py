@@ -42,7 +42,7 @@ for s in sents:
 data = {
     'k': [[x['k'], x['g'], x['on'], x['kun'], x['m'], x['w'], x['st']] for x in A['K']],
     'g': [[g, ''.join(ks)] for g, ks in groups],
-    't': [[t['jp'], t['en'], t['w']] for t in texts],
+    't': [[t['title'], t['jp'], t['en'], t['w']] for t in texts],
     's': S,
 }
 blob = json.dumps(data, ensure_ascii=False, separators=(',', ':'))

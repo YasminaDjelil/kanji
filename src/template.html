@@ -236,11 +236,11 @@ function missing(t){return t.k.filter(function(c){return !st(c)});}
 function vRead(){
   var ready=[], near=[], far=0;
   TX.forEach(function(t,i){var m=missing(t); if(!m.length) ready.push(i); else if(m.length<=4) near.push([i,m]); else far++;});
-  var h=readTabs('t')+'<p class="muted">Short texts to copy into your notebook. A text opens once you have ticked every kanji in it, so nothing unknown ever appears.</p>';
+  var h=readTabs('t')+'<p class="muted">Short everyday scenes to copy into your notebook: conversations, diary entries, notices, letters. A text opens once you have ticked every kanji in it, so nothing unknown ever appears.</p>';
   h+='<h2>Ready to read · '+ready.length+'</h2>';
   if(!ready.length) h+='<p class="note">Nothing yet. Tick the kanji of the first group in Grade 1 and the first text opens.</p>';
-  ready.slice().reverse().forEach(function(i){var t=TX[i]; h+='<a class="card tcard" href="#text/'+(i+1)+'"><div><b>Text '+(i+1)+'</b> <span class="muted small">· Grade '+D.g[i][0]+'</span><div class="j" lang="ja">'+esc(plain(t.jp).slice(0,40))+'</div></div><span class="tg">Open</span></a>';});
-  if(near.length){h+='<h2>Nearly there</h2>'; near.slice(0,12).forEach(function(x){h+='<div class="card"><div class="row" style="justify-content:space-between"><span><b>Text '+(x[0]+1)+'</b> <span class="muted small">· Grade '+D.g[x[0]][0]+'</span></span><span class="need"><span class="muted small">still needs</span>'+x[1].map(function(c){return tile(c,'sm')}).join('')+'</span></div></div>';});}
+  ready.slice().reverse().forEach(function(i){var t=TX[i]; h+='<a class="card tcard" href="#text/'+(i+1)+'"><div><b>'+esc(t.ti)+'</b> <span class="muted small">· Text '+(i+1)+' · Grade '+D.g[i][0]+'</span><div class="j" lang="ja">'+esc(plain(t.jp).slice(0,40))+'</div></div><span class="tg">Open</span></a>';});
+  if(near.length){h+='<h2>Nearly there</h2>'; near.slice(0,12).forEach(function(x){h+='<div class="card"><div class="row" style="justify-content:space-between"><span><b>'+esc(TX[x[0]].ti)+'</b> <span class="muted small">· Text '+(x[0]+1)+' · Grade '+D.g[x[0]][0]+'</span></span><span class="need"><span class="muted small">still needs</span>'+x[1].map(function(c){return tile(c,'sm')}).join('')+'</span></div></div>';});}
   if(far) h+='<p class="muted small">'+far+' more texts open up as you tick more kanji.</p>';
   main.innerHTML=h; window.scrollTo(0,0);
 }
@@ -248,8 +248,8 @@ function vText(n){
   var t=TX[n-1]; if(!t||missing(t).length){location.hash='#read'; return;}
   var ready=[]; TX.forEach(function(x,i){if(!missing(x).length) ready.push(i+1)}); var p=ready.indexOf(n);
   var h='<div class="nav2"><a class="tg" href="#read">← Texts</a><span class="row">'+(p>0?'<a class="tg" href="#text/'+ready[p-1]+'">← Text '+ready[p-1]+'</a>':'')+(p<ready.length-1?'<a class="tg" href="#text/'+ready[p+1]+'">Text '+ready[p+1]+' →</a>':'')+'</span></div>';
-  h+='<h1>Text '+n+' <span class="muted small" style="font-weight:400">· Grade '+D.g[n-1][0]+'</span></h1>'+fuSeg();
-  h+='<section class="card"><p class="txt" lang="ja">'+jp(t.jp)+'</p></section>';
+  h+='<div><h1>'+esc(t.ti)+'</h1><p class="muted small">Text '+n+' · Grade '+D.g[n-1][0]+'</p></div>'+fuSeg();
+  h+='<section class="card"><p class="txt" lang="ja">'+jp(t.jp).replace(/」「/g,'」<br>「').replace(/。「/g,'。<br>「').replace(/」(?=[^<と「」、。])/g,'」<br>')+'</p></section>';
   h+='<p class="muted small">Copy it out by hand, then read it aloud. Cover the furigana once the readings come easily.</p>';
   h+='<section class="card"><button class="rev" data-a="rev">Show the English</button><span hidden>'+esc(t.en)+'</span></section>';
   h+='<section class="card"><h3>Words in this text</h3><ul class="wl" style="margin-top:4px">'+t.w.map(function(w){return '<li><b lang="ja"><ruby>'+esc(w[0])+'<rt>'+esc(w[1])+'</rt></ruby></b><span>'+esc(w[2])+'</span></li>'}).join('')+'</ul></section>';
@@ -367,7 +367,7 @@ function vMore(){
   var t=counts(0), h='<h1>More</h1>';
   h+='<section class="card" style="display:flex;flex-direction:column;gap:12px"><h3>Furigana in texts and sentences</h3>'+fuSeg()+'<h3>Appearance</h3><div class="seg" style="align-self:flex-start">'+[['','Automatic'],['light','Light'],['dark','Dark']].map(function(a){return '<button data-a="theme" data-v="'+a[0]+'"'+(S.theme===a[0]?' class="on"':'')+'>'+a[1]+'</button>'}).join('')+'</div></section>';
   h+='<section class="card" style="display:flex;flex-direction:column;gap:10px"><h3>Backup</h3><p class="muted small">'+(HOSTED?'Your ticks are kept in this browser on this device only.':'This is the single-file version: your ticks last only until you close the page, so save a backup before you leave.')+' A backup is one small file you can restore here or on another device.'+(S.bk?' Last backup: '+new Date(S.bk).toLocaleDateString()+'.':'')+'</p><div class="row"><button class="tg pri" data-a="backup">Save a backup</button><label class="tg">Restore from a file<input type="file" id="rfile" accept=".json,application/json" hidden></label></div><p class="muted small">'+t.k+' known · '+t.l+' learning</p><div><button class="rev" data-a="reset">Clear all my ticks</button></div></section>';
-  h+='<section class="card"><h3>About</h3><dl class="about" style="margin-top:8px"><div><dt>What this is</dt><dd>The 1,026 kanji taught in Japanese primary school, in the grades they are taught in. A checklist you tick yourself, with words, texts to copy out, quizzes and practice sheets. No points, no streaks, nothing locked.</dd></div><div><dt>Kanji, readings, meanings and words</dt><dd>From KANJIDIC2 and JMdict, the property of the Electronic Dictionary Research and Development Group, used under the <a href="https://www.edrdg.org/edrdg/licence.html" rel="noopener">Group\'s licence</a> (CC BY-SA 4.0).</dd></div><div><dt>Stroke order</dt><dd>From <a href="https://kanjivg.tagaini.net/" rel="noopener">KanjiVG</a>, © Ulrich Apel, CC BY-SA 3.0.</dd></div><div><dt>Sentences</dt><dd>From the <a href="https://tatoeba.org/" rel="noopener">Tatoeba</a> project, CC BY 2.0 FR. Each one shows its number and contributors.</dd></div><div><dt>Texts and the app</dt><dd>The 128 short texts, the order of the kanji within each grade and the app itself were made with an AI assistant. No teacher has checked the texts, so treat them as practice material and expect the odd stiff sentence.</dd></div></dl></section>';
+  h+='<section class="card"><h3>About</h3><dl class="about" style="margin-top:8px"><div><dt>What this is</dt><dd>The 1,026 kanji taught in Japanese primary school, in the grades they are taught in. A checklist you tick yourself, with words, texts to copy out, quizzes and practice sheets. No points, no streaks, nothing locked.</dd></div><div><dt>Kanji, readings, meanings and words</dt><dd>From KANJIDIC2 and JMdict, the property of the Electronic Dictionary Research and Development Group, used under the <a href="https://www.edrdg.org/edrdg/licence.html" rel="noopener">Group\'s licence</a> (CC BY-SA 4.0).</dd></div><div><dt>Stroke order</dt><dd>From <a href="https://kanjivg.tagaini.net/" rel="noopener">KanjiVG</a>, © Ulrich Apel, CC BY-SA 3.0.</dd></div><div><dt>Sentences</dt><dd>From the <a href="https://tatoeba.org/" rel="noopener">Tatoeba</a> project, CC BY 2.0 FR. Each one shows its number and contributors.</dd></div><div><dt>Texts and the app</dt><dd>The 128 short texts, the order of the kanji within each grade and the app itself were made with an AI assistant. Each text is a small everyday scene: a conversation, a diary entry, a notice, a letter. No teacher has checked them, so treat them as practice material.</dd></div></dl></section>';
   main.innerHTML=h; window.scrollTo(0,0);
   var rf=document.getElementById('rfile'); rf.addEventListener('change',function(){ if(rf.files[0]) restoreFrom(rf.files[0]); });
 }
@@ -423,7 +423,7 @@ main.addEventListener('click',function(e){
 });
 function start(d){
   D=d; K=D.k; K.forEach(function(a,i){KI[a[0]]=i}); D.g.forEach(function(G,i){G[1].split('').forEach(function(c){GI[c]=i})});
-  SN=D.s.map(function(s){return {k:kOf(s[0])}}); TX=D.t.map(function(t){return {jp:t[0],en:t[1],w:t[2],k:kOf(t[0])}});
+  SN=D.s.map(function(s){return {k:kOf(s[0])}}); TX=D.t.map(function(t){return {ti:t[0],jp:t[1],en:t[2],w:t[3],k:kOf(t[1])}});
   load(); applyTheme(); route(); window.addEventListener('hashchange',route);
 }
 var emb=document.getElementById('data');

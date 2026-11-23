@@ -8,7 +8,7 @@ I made this for my own study. Anyone is welcome to use it.
 
 - **A checklist, not a course.** Each kanji is *not yet*, *learning* or *known*, and I am the one who ticks it. Nothing is scheduled, scored or locked. The kanji come in a suggested order (commonest first inside each grade, eight at a time), but any kanji can be ticked at any time.
 - **Each kanji has a page**: stroke order, readings, meanings, a few words written only with that kanji and earlier ones, and example sentences.
-- **Texts to copy out.** There are 128 short texts, one per group. A text opens only when every kanji in it is ticked, so nothing unknown ever shows up. Furigana appears on the kanji still marked as learning.
+- **Texts to copy out.** There are 128 short texts, one per group, each a small everyday scene (a conversation, a diary entry, a notice, a letter) with a title. A text opens only when every kanji in it is ticked, so nothing unknown ever shows up. Furigana appears on the kanji still marked as learning.
 - **Sentences.** About 4,300 real sentences from Tatoeba, shown only when all their kanji are ticked.
 - **Three quizzes**: kanji to meaning, word to reading, and reading a word inside a sentence. They only ask about ticked kanji and never change a tick.
 - **Printable practice sheets** for a group, for chosen kanji, or for everything marked as learning.
@@ -20,7 +20,7 @@ No points, streaks or levels.
 
 The kanji data, readings, meanings and words come from the EDRDG dictionary files (KANJIDIC2 and JMdict), the stroke order from KanjiVG and the sentences from Tatoeba. Those are human work; see `NOTICE.md`.
 
-The app, the order of the kanji inside each grade and the 128 texts were made with the help of an AI assistant (Claude). Every text is checked by the build: each kanji must carry its reading, each word and reading must exist in JMdict, and no text may use a kanji from a later group. That catches wrong kanji and wrong readings. It does not make the texts good Japanese: no teacher or native speaker has read them, and the later ones are stiff. If you spot a mistake, open an issue.
+The app, the order of the kanji inside each grade and the 128 texts were made with the help of an AI assistant (Claude). Every text is checked by the build: each kanji must carry its reading, each word and reading must exist in JMdict, and no text may use a kanji from a later group. That catches wrong kanji and wrong readings. It does not make the texts good Japanese: no teacher or native speaker has read them. If you spot a mistake, open an issue.
 
 ## Using it on a phone
 
@@ -38,7 +38,7 @@ The site is generated. Don't edit `index.html` or `data.json` by hand; edit the 
 
 That rewrites `index.html` and `data.json`, copies the service worker, manifest and icons into place, and also makes `kanji.html`, the whole app as one file (not committed). The build stops with a message if a text or sentence breaks one of the rules above.
 
-After changing anything, also bump the version in `src/static/sw.js` (`kanji-v2` → `kanji-v3`) so phones pick up the update.
+After changing anything, also bump the version in `src/static/sw.js` (`kanji-v3` → `kanji-v4`) so phones pick up the update.
 
 | What you want to change | File |
 |---|---|

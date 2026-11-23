@@ -50,11 +50,11 @@ def lookup(w, r, after, lemma):
         if (w + o, r + o) in DICT and (len(o) == 1 or kana[:1] == o[0]): return w + o, r + o, gl2(w + o, r + o)
     return False
 lines = [l.rstrip('\n') for l in open('texts.txt', encoding='utf-8') if l.strip() and not l.startswith('#')]
-assert len(lines) % 3 == 0
+assert len(lines) % 4 == 0, len(lines)
 out, errs, warn, nogloss = {}, [], [], []
 CH = re.compile(r'\{([^{}|]+)\|([^{}|]+)\}')
-for i in range(0, len(lines), 3):
-    key, jp, en = lines[i:i + 3]
+for i in range(0, len(lines), 4):
+    key, title, jp, en = lines[i:i + 4]
     if key not in first: errs.append('%s: not the first kanji of a group' % key); continue
     g = first[key]
     bare = CH.sub('', jp)
@@ -90,7 +90,7 @@ for i in range(0, len(lines), 3):
         a, b = st(mine), st(fu); p = 0
         while p < min(len(a), len(b)) and a[p] == b[p]: p += 1
         warn.append('%s: tokenizer reads differently near: mine …%s / it …%s' % (key, a[max(0, p - 4):p + 8], b[max(0, p - 4):p + 8]))
-    out[key] = {'g': g, 'jp': jp, 'en': en, 'need': ''.join(sorted(used, key=lambda c: gi[c])), 'w': words}
+    out[key] = {'g': g, 'title': title, 'jp': jp, 'en': en, 'need': ''.join(sorted(used, key=lambda c: gi[c])), 'w': words}
 missing = [ks[0] for g, ks in groups if ks[0] not in out and not any(e.startswith(ks[0] + ':') for e in errs)]
 print('\n'.join(errs)); print('--- warnings'); print('\n'.join(warn)); print('--- no gloss:', ' '.join(nogloss)); print('missing groups:', missing)
 if errs or missing: sys.exit(1)
