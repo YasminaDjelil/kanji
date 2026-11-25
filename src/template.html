@@ -132,6 +132,7 @@ dl.about{margin:0;display:grid;gap:10px;font-size:14.5px} dl.about dt{font-weigh
 @media print{
   body.psheet>*:not(#printsheet){display:none!important}
   body.psheet{background:#fff!important;color:#000}
+  .pk-w{display:flex;flex-wrap:wrap;gap:0 14px} .pk-w b{font-weight:600}
   body.psheet #printsheet{display:block;font:11pt/1.35 var(--ui);color:#000}
   @page{margin:12mm}
 }
@@ -337,10 +338,10 @@ function qShow(){
 function pSvg(c,upto,cls){var s=K[KI[c]][6], h='<svg viewBox="0 0 109 109" class="'+cls+'"><path class="pg" d="M54.5 0V109M0 54.5H109"/>'; for(var i=0;i<s.length&&(upto<0||i<=upto);i++) h+='<path class="ps'+(upto>=0&&i===upto?' cur':'')+'" d="'+s[i]+'"/>'; return h+'</svg>';}
 function printSheet(ks,title){ if(!ks.length) return;
   var el=document.getElementById('printsheet'), h='<header><b lang="ja">漢字</b> practice sheet'+(title?' — '+esc(title):'')+'</header>';
-  ks.forEach(function(c){var a=K[KI[c]], w=a[5][0], steps='', boxes='';
+  ks.forEach(function(c){var a=K[KI[c]], ws=a[5].filter(function(x){return x[0]!==c}).concat(a[5].filter(function(x){return x[0]===c})).slice(0,3), steps='', boxes='';
     for(var i=0;i<a[6].length&&i<18;i++) steps+=pSvg(c,i,'pstep');
     for(var j=0;j<10;j++) boxes+=j<3?pSvg(c,-1,'pbox faint'):'<svg viewBox="0 0 109 109" class="pbox"><path class="pg" d="M54.5 0V109M0 54.5H109"/></svg>';
-    h+='<section class="pk"><div class="pk-h">'+pSvg(c,-1,'pbig')+'<div class="pk-i"><b>'+esc(a[4].join(', '))+'</b><span lang="ja">'+esc([a[2].join('、'),a[3].join('、')].filter(Boolean).join(' · '))+'</span>'+(w?'<span lang="ja">'+esc(w[0])+(w[1]!==w[0]?' ('+esc(w[1])+')':'')+' <i>'+esc(w[2])+'</i></span>':'')+'<div class="psteps">'+steps+'</div></div></div><div class="pboxes">'+boxes+'</div></section>';});
+    h+='<section class="pk"><div class="pk-h">'+pSvg(c,-1,'pbig')+'<div class="pk-i"><b>'+esc(a[4].join(', '))+'</b><span lang="ja">'+esc([a[2].join('、'),a[3].join('、')].filter(Boolean).join(' · '))+'</span>'+'<span class="pk-w" lang="ja">'+ws.map(function(w){return '<span><b>'+esc(w[0])+'</b>'+(w[1]!==w[0]?' ('+esc(w[1])+')':'')+' <i>'+esc(w[2].split(';')[0])+'</i></span>'}).join('')+'</span>'+'<div class="psteps">'+steps+'</div></div></div><div class="pboxes">'+boxes+'</div></section>';});
   el.innerHTML=h; b.classList.add('psheet');
   var done=function(){b.classList.remove('psheet'); window.removeEventListener('afterprint',done);};
   window.addEventListener('afterprint',done);
