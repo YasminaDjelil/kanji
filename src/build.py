@@ -40,7 +40,7 @@ for s in sents:
     S.append([jp] + s[1:])
 
 data = {
-    'k': [[x['k'], x['g'], x['on'], x['kun'], x['m'], x['w'], x['st']] for x in A['K']],
+    'k': [[x['k'], x['g'], x['on'], x['kun'], x['m'], x['w'], x['st'], x.get('q', [])] for x in A['K']],
     'g': [[g, ''.join(ks)] for g, ks in groups],
     't': [[t['title'], t['jp'], t['en'], t['w']] for t in texts],
     's': S,

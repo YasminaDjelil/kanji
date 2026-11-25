@@ -47,6 +47,16 @@ EXTRA = {'茨': [('茨城', 'いばらき', 'Ibaraki (prefecture)')], '栃': [('
  '岐': [('岐阜', 'ぎふ', 'Gifu (city, prefecture)')], '賀': [('滋賀', 'しが', 'Shiga (prefecture)'), ('佐賀', 'さが', 'Saga (city, prefecture)')], '阪': [('大阪', 'おおさか', 'Osaka (city, prefecture)')],
  '潟': [('新潟', 'にいがた', 'Niigata (city, prefecture)')], '熊': [('熊本', 'くまもと', 'Kumamoto (city, prefecture)')], '鹿': [('鹿児島', 'かごしま', 'Kagoshima (city, prefecture)')], '崎': [('長崎', 'ながさき', 'Nagasaki (city, prefecture)')], '沖': [('沖縄', 'おきなわ', 'Okinawa (prefecture)')], '縄': [('沖縄', 'おきなわ', 'Okinawa (prefecture)')], '岡': [('福岡', 'ふくおか', 'Fukuoka (city, prefecture)')], '佐': [('佐賀', 'さが', 'Saga (city, prefecture)')], '富': [('富山', 'とやま', 'Toyama (city, prefecture)')], '井': [('福井', 'ふくい', 'Fukui (city, prefecture)')], '香': [('香川', 'かがわ', 'Kagawa (prefecture)')], '徳': [('徳島', 'とくしま', 'Tokushima (city, prefecture)')], '群': [('群馬', 'ぐんま', 'Gunma (prefecture)')]}
 words, stats = {}, [0, 0, 0, 0]
+useful = {}
+BX = {}
+_s = set()
+for e in C:
+    w = e['w'][0]; lv = BASIC.get((w, e['r']))
+    if lv is None or (w, e['r']) in _s or not e['s']: continue
+    _s.add((w, e['r']))
+    for c in set(w):
+        if c in pos: BX.setdefault(c, []).append((lv, e['rank'], w, e['r'], gloss(e)))
+
 for k in order:
     L = sorted(cand[k]); g = rows[k][2]; r = rows[k]
     pick, used = [], set()
@@ -84,19 +94,46 @@ for k in order:
     for w, rd, m in EXTRA.get(k, []):
         add(w, rd, m, 1 if any(pos[c] > pos[k] for c in w) else 0)
     words[k] = pick
+    # useful words: the best-known words with this kanji, whatever other school kanji they use
+    use, uu = [], set()
+    def addu(w, rd, m):
+        if w in uu or len(use) >= 6: return
+        uu.add(w); use.append([w, rd, m])
+    for x in kw[:2]:
+        if x[0] < 2 or x[1] == 0 or not use: addu(x[3], x[4], x[5])
+    if not use:
+        for on in r[5]:
+            e = byWR.get((k, hira(on)))
+            if e and 'ichi1' in e['tags']: addu(k, hira(on), gloss(e)); break
+    for x in sorted(BX.get(k, []))[:5]:
+        if x[2] != k and len(x[2]) <= 5: addu(x[2], x[3], x[4])
+    ok = [x for x in L if x[1] != k and len(x[1]) <= 4 and len(set(c for c in x[1] if iskanji(c))) == len([c for c in x[1] if iskanji(c)])]
+    good = [x for x in ok if x[0][0] < 2 or (x[0][1] == 0 and x[0][2] <= 6000)]
+    for x in good[:4]:
+        if len(use) < 5: addu(x[1], x[2], x[3])
+    for on in r[5][:3]:
+        h = hira(on)
+        if any(h in u[1] for u in use): continue
+        for x in good:
+            if h in x[2]: addu(x[1], x[2], x[3]); break
+    for x in good: addu(x[1], x[2], x[3])
+    if len(use) < 4:
+        for x in ok:
+            if len(use) < 4: addu(x[1], x[2], x[3])
+    if not use:
+        for p in pick: addu(p[0], p[1], p[2])
+    for w, rd, m in EXTRA.get(k, []): addu(w, rd, m)
+    useful[k] = use
     stats[min(len([p for p in pick if len(p) == 3]), 3)] += 1
 print('kanji with 0/1/2/3+ strict words:', stats, 'no words at all:', [k for k in order if not words[k]])
-def clean(rs): return [r for r in rs if r]
-K = []
-for k in order:
-    r = rows[k]
-    svg = open(os.path.join(KV, '%05x.svg' % ord(k)), encoding='utf-8').read()
-    st = [x[1] for x in sorted(re.findall(r'<path id="kvg:[0-9a-f]+-s(\d+)"[^>]*? d="([^"]+)"', svg), key=lambda a: int(a[0]))]
-    assert st, k
-    if len(st) != r[1]: print('stroke count differs', k, len(st), r[1])
-    kun = [x for x in r[6] if not x.startswith('-') and not x.endswith('-')][:4]
-    K.append({'k': k, 'g': r[2], 'n': len(st), 'on': r[5][:3], 'kun': kun, 'm': r[7][:4], 'w': words[k], 'st': st})
-json.dump({'K': K, 'groups': groups}, open('kanji_all.json', 'w', encoding='utf-8'), ensure_ascii=False)
-for g, x in groups[:12] + groups[10:14] + groups[-3:]: print(g, ''.join(x))
-print(len(groups), 'groups')
-print(sum(len(json.dumps(x['st'])) for x in K))
+
+import collections
+P='../kanji-repo/src/data/kanji.json'
+A=json.load(open(P,encoding='utf-8'))
+for x in A['K']:
+    x['q']=[p[:3] for p in words[x['k']] if p[0] not in {u[0] for u in useful[x['k']]}]
+    x['w']=useful[x['k']]
+json.dump(A,open(P,'w',encoding='utf-8'),ensure_ascii=False)
+print(collections.Counter(len(x['w']) for x in A['K']))
+for c in '地県電車会社新聞雨震鉄手上分行楽':
+    x=[y for y in A['K'] if y['k']==c][0]; print(c,' '.join(w[0]+'('+w[1]+')' for w in x['w']),'| quiz:',' '.join(w[0] for w in x['q']))

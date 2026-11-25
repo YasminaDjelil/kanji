@@ -1,6 +1,6 @@
 // Offline support: everything is cached on first visit, then served from the cache.
 // Change VERSION whenever you upload new files so phones pick up the update.
-const VERSION = 'kanji-v3';
+const VERSION = 'kanji-v4';
 const FILES = ['./', 'index.html', 'data.json', 'manifest.webmanifest', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));

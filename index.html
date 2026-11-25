@@ -211,6 +211,7 @@ function vKanji(){
 }
 // ---------- one kanji ----------
 function strokesSvg(c,cls){var a=K[KI[c]], h='<svg viewBox="0 0 109 109" class="'+(cls||'')+'" aria-hidden="true"><path class="kx" d="M54.5 0V109M0 54.5H109"/>'; a[6].forEach(function(d){h+='<path class="ks" d="'+d+'"/>'}); return h+'</svg>';}
+function QW(a){return a[5].concat(a[7]||[]);}
 function stop(){timers.forEach(clearTimeout); timers=[];}
 function anim(svg){stop(); if(!svg) return; var ps=svg.querySelectorAll('.ks'), t=250;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -227,7 +228,7 @@ function vDetail(c){
   h+='<section class="card"><h3>Stroke by stroke</h3><div class="steps" style="margin-top:10px" aria-hidden="true">';
   a[6].forEach(function(_,n){h+='<svg viewBox="0 0 109 109">'; for(var j=0;j<=n;j++) h+='<path class="ks'+(j===n?' cur':'')+'" d="'+a[6][j]+'"/>'; h+='</svg>';});
   h+='</div><p style="margin-top:12px"><button class="tg" data-a="sheetone" data-k="'+c+'">Print a practice sheet</button></p></section>';
-  if(a[5].length){h+='<section class="card"><h3>Words</h3><ul class="wl" style="margin-top:4px">'; a[5].forEach(function(w){h+='<li><b lang="ja"><ruby>'+esc(w[0])+'<rt>'+esc(w[1])+'</rt></ruby></b><span>'+esc(w[2])+'</span>'+(w[3]?'<span class="lt">uses a kanji that comes later in the order</span>':'')+'</li>';}); h+='</ul></section>';}
+  if(a[5].length){h+='<section class="card"><h3>Useful words</h3><ul class="wl" style="margin-top:4px">'; a[5].forEach(function(w){h+='<li><b lang="ja"><ruby>'+esc(w[0])+'<rt>'+esc(w[1])+'</rt></ruby></b><span>'+esc(w[2])+'</span>'+'</li>';}); h+='</ul></section>';}
   var ss=[]; for(var n=0;n<SN.length&&ss.length<3;n++){var s=SN[n]; if(s.k.indexOf(c)<0) continue; var okk=true; for(var j=0;j<s.k.length;j++) if(s.k[j]!==c&&!st(s.k[j])){okk=false;break;} if(okk) ss.push(D.s[n]);}
   h+='<section class="card"><h3>In a sentence</h3>'+(ss.length?ss.map(function(s){return sentHtml(s,{all:!st(c)})}).join(''):'<p class="muted small" style="margin-top:6px">Sentences show up here once the other kanji they use are ticked.</p>')+'</section>';
   h+='<p class="muted small" style="text-align:center">Readings, meanings and words: KANJIDIC2 and JMdict, © EDRDG. Strokes: KanjiVG. <a href="#more">Sources</a></p>';
@@ -287,12 +288,12 @@ function qBuild(type,pool){
     var cand=K.filter(function(x){return x[1]===a[1]&&x[0]!==c}).map(function(x){return x[4].slice(0,2).join(', ')});
     var o=pick4(ans,cand); if(o) items.push({k:c,show:'<div class="qbig" lang="ja">'+c+'</div>',opts:o,ans:ans,ja:false,after:esc(a[4].join(', '))});});
   if(type==='r'){
-    K.forEach(function(a){ if(st(a[0])) a[5].forEach(function(w){allR.push(w[1])});});
-    P.forEach(function(c){ if(items.length>=10) return; var ws=K[KI[c]][5].filter(function(w){for(var i=0;i<w[0].length;i++){var ch=w[0][i]; if(KI[ch]!==undefined&&!st(ch)) return false;} return true;});
+    K.forEach(function(a){ if(st(a[0])) QW(a).forEach(function(w){allR.push(w[1])});});
+    P.forEach(function(c){ if(items.length>=10) return; var ws=QW(K[KI[c]]).filter(function(w){for(var i=0;i<w[0].length;i++){var ch=w[0][i]; if(KI[ch]!==undefined&&!st(ch)) return false;} return true;});
       if(!ws.length) return; var w=ws[Math.floor(Math.random()*ws.length)], cand=[];
       if(w[0].length===1) cand=readings(c); 
       var o=pickR(w[1],cand,allR);
-      if(!o){var extra=[]; K.forEach(function(a){ if(a[1]===K[KI[c]][1]) a[5].forEach(function(x){extra.push(x[1])});}); o=pickR(w[1],cand,extra);}
+      if(!o){var extra=[]; K.forEach(function(a){ if(a[1]===K[KI[c]][1]) QW(a).forEach(function(x){extra.push(x[1])});}); o=pickR(w[1],cand,extra);}
       if(o) items.push({k:c,show:'<div class="qword" lang="ja">'+esc(w[0])+'</div>',opts:o,ans:w[1],ja:true,after:'<span lang="ja">'+esc(w[0])+'（'+esc(w[1])+'）</span> — '+esc(w[2])});});
   }
   if(type==='s'){
